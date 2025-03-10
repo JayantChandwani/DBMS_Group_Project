@@ -1,4 +1,3 @@
-#!/usr/bin/python2.4
 # -*- coding: utf-8 -*-
 
 from Account import *
@@ -6,6 +5,7 @@ from image_viewer import *
 # from products import *
 import tkinter as tk 
 from tkinter.ttk import *
+from ttkthemes import *
  
 createdb()
 createtable()
@@ -16,8 +16,8 @@ root.configure(bg = '#282c34')
 root.geometry("2000x1000")
 
 # ========== Creating Styles ==========
-style = Style()
-style.theme_use('xpnative')
+style = ThemedStyle()
+style.theme_use('ubuntu')
 style.configure('Heading_main.TLabel', font = ("Times New Roman", 40, "bold"), foreground = 'white', background = '#282c34')
 style.configure('image.TLabel', height = 246, width = 184, background = '#282c34')
  

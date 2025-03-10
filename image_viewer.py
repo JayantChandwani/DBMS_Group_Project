@@ -8,6 +8,8 @@ from db import *
 from savedata import *
 from cart import *
 import tkinter.messagebox as messagebox
+from ttkthemes import *
+
 
 def add_to_cart_func(product_number, win):
     email = get_email()
@@ -24,8 +26,8 @@ def viewitem(product_number, img_number):
     win.geometry('1200x600')
     win.title("Product")
     
-    style = Style()
-    style.theme_use('xpnative')
+    style = ThemedStyle()
+    style.theme_use('ubuntu')
     style.configure("status.TLabel", foreground="black", background="white", relief = 'sunken', anchor = 'e', bd = 1)
     style.configure('a.TLabel', font = ('Times New Roman', 24, 'bold'), width = '400', justify = 'center')
 
