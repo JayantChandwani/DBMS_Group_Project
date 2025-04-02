@@ -9,16 +9,37 @@ from savedata import *
 from cart import *
 import tkinter.messagebox as messagebox
 from ttkthemes import *
+from db import c  # Import the cursor
 
 
 def add_to_cart_func(product_number, win):
+    from db import c as db_cursor  # Import cursor locally
+    
     email = get_email()
     if email != "":
-        update_cart(product_number, email)
-        messagebox.showinfo("","Product Added to Cart")
+        # Check if product exists
+        db_cursor.execute("USE SHOPPING;")
+        db_cursor.execute("SELECT COUNT(*) FROM product WHERE pid = %s;", (product_number,))
+        if db_cursor.fetchone()[0] == 0:
+            messagebox.showerror("", "Product does not exist")
+            return
+            
+        # Get current quantity in cart
+        db_cursor.execute("SELECT quantity FROM cart_items WHERE email = %s AND product_id = %s;", 
+                 (email, product_number))
+        result = db_cursor.fetchone()
+        
+        current_qty = result[0] if result else 0
+            
+        if current_qty < 10:  # Max 10 items per product
+            update_cart(product_number, email, current_qty + 1)
+            messagebox.showinfo("","Product Added to Cart")
+        else:
+            messagebox.showinfo("","Maximum quantity (10) reached for this item")
+            
         win.destroy()
     else:
-        messagebox.showinfo("","Pleaes Login Before Adding To Cart")
+        messagebox.showinfo("","Please Login Before Adding To Cart")
 
 def viewitem(product_number, img_number):
     global my_label
@@ -83,9 +104,6 @@ def viewitem(product_number, img_number):
     # Creating  and placing widgets
     back_button = Button(frame, text = '<',command = back, state = 'disabled')
     back_button.grid(row = 1, column = 0)
-
-    button_exit = Button(frame, text = 'Exit', command = frame.quit)
-    button_exit.grid(row = 1, column = 1)
 
     forward_button = Button(frame, text = '>', command = lambda: forward(2))
     forward_button.grid(row = 1, column = 2)

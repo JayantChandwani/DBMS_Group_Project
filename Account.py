@@ -20,7 +20,7 @@ def signin():
     signin_win.geometry("581x322")
     signin_win.resizable(False, False)
 
-    # ========== Frames ==========
+    # ========== Frames ========== 
     signin_win.configure(bg = '#21252b')
 
     frame = tk.Frame(signin_win, bg = '#282c34')
@@ -28,7 +28,7 @@ def signin():
     
     heading = Label(frame, text = 'SIGNIN', style = 'Heading.TLabel')
 
-    # ========== Creating Widgets ==========
+    # ========== Creating Widgets ========== 
     Fname = Entry(frame, style = 'signin.TEntry')
     Fname_label = Label(frame, text='First name : ', style = 'signin_entry.TLabel')
 
@@ -50,7 +50,7 @@ def signin():
 
     Info = tk.Message(frame, bg = '#282c34', text = t, font = ('Times New Roman', 10, 'italic'), fg = '#f7576c', width = 560)
 
-    # ========== Placing Widgets ==========
+    # ========== Placing Widgets ========== 
     heading.grid(row=0, column=0, columnspan=2)
 
     Fname_label.grid(row = 1, column = 0)
@@ -91,7 +91,7 @@ def signin():
                     if i.isdigit():
                         digit = 1
 
-        # Login Successful            
+        # Login Successful             
         if upper == 1 and special == 1 and digit == 1: 
             Fname_label.grid_forget()
             Lname_label.grid_forget()
@@ -154,13 +154,13 @@ def login(login_state, Account_frame):
     login_win.geometry("581x322")
     login_win.resizable(False, False)
 
-    # ========== Background and Frames ==========
+    # ========== Background and Frames ========== 
     login_win.configure(bg = '#282c34')
 
     frame = tk.Frame(login_win, bg = '#282c34')
     frame.place(x=11, y=11, height = 301, width = 560)
 
-    # ========== Creating Widgets ==========
+    # ========== Creating Widgets ========== 
     heading = Label(frame, text = 'LOGIN', style = 'Heading.TLabel')
     heading.grid(row = 0, column = 0, columnspan = 2, sticky = 'we')
 
@@ -176,7 +176,7 @@ def login(login_state, Account_frame):
     resend_otp = tk.Button(frame, text = 'Resend OTP ? ', command = lambda : send_otp(email.get()), bg = '#282c34', fg = '#219afc', bd = 0)
     forgotpassword_label = tk.Button(frame, text = 'forgot password ?', command = lambda : forgotpassword(Account_frame), bg = '#282c34', fg = '#219afc', bd = 0, padx = 100)
 
-    # ========== Placing Widgets ==========
+    # ========== Placing Widgets ========== 
     email_label.grid(row = 1, column = 0, pady = 10)
     email.grid(row = 1, column = 1)
     
@@ -198,16 +198,21 @@ def login(login_state, Account_frame):
                 for widgets in Account_frame.winfo_children():
                     widgets.destroy()
             
-                cart_button = tk.Button(Account_frame, text = 'Cart', command = cart, padx = 10, pady = 10, bg = '#3276fc', fg = 'white', font = 'Impact')
+                cart_button = tk.Button(Account_frame, text='🛒 Cart', command=cart, 
+                                      padx=10, pady=5, bg='#3276fc', 
+                                      fg='white', font=('Times New Roman', 12, 'bold'))
+                logout_button = tk.Button(Account_frame, text='Logout', 
+                                        command=lambda: logout(Account_frame),
+                                        padx=10, pady=5, bg='#3276fc',
+                                        fg='white', font=('Times New Roman', 12, 'bold'))
                 
-                cart_button.grid(row = 0, column = 0)
+                cart_button.grid(row=0, column=0, padx=5)
+                logout_button.grid(row=0, column=1, padx=5)
                 
                 messagebox.showinfo("","Logged In Successfuly")
-                
 
             else:
                 response = messagebox.showerror("","Incorrect Password")
-
         else:
             response = messagebox.showerror("","Account Name Doesn't Exist")        
 
@@ -243,14 +248,14 @@ def login(login_state, Account_frame):
                         else:
                             messagebox.showerror("","Both passwords are not same ")
 
-                    # ========== Creating Widgets ==========
+                    # ========== Creating Widgets ========== 
                     new_password_label = Label(frame, text = 'New Password : ', style = 'signin_entry.TLabel')
                     new_password = Entry(frame, style = 'signin.TEntry')
                     re_enter_password_label = Label(frame, text = 'Re-enter Password : ', style = 'signin_entry.TLabel')
                     re_enter_password = Entry(frame, style = 'signin.TEntry')
                     verify_btn = Button(frame, text = 'Verify', style = 'a.TButton', command = lambda: verify(new_password.get(), re_enter_password.get(), email_var))
 
-                    # ========== Placing Widgets ==========
+                    # ========== Placing Widgets ========== 
                     new_password_label.grid(row = 1, column = 0, pady = 10)
                     new_password.grid(row = 1, column = 1)
 
@@ -284,6 +289,29 @@ def login(login_state, Account_frame):
 
         send_otp_button.grid(row = 3, column = 0, pady = 20, padx = 200, columnspan = 2)
         # btn.place(x=90, y=154)
+
+def user_login(Account_frame):
+    login_state = read_file()[0]
+    login(login_state, Account_frame)
+
+def logout(Account_frame):
+    update_file(False)
+    update_email_file("")
+    
+    for widgets in Account_frame.winfo_children():
+        widgets.destroy()
+        
+    signin_button = tk.Button(Account_frame, text='Sign in', padx=10, pady=5, 
+                            command=signin, bg='#3276fc', fg='white', 
+                            font=('Times New Roman', 12, 'bold'))
+    login_button = tk.Button(Account_frame, text='Log in', padx=10, pady=5,
+                            command=lambda: login(False, Account_frame), bg='#3276fc', 
+                            fg='white', font=('Times New Roman', 12, 'bold'))
+    
+    signin_button.grid(row=0, column=0, padx=5)
+    login_button.grid(row=0, column=1, padx=5)
+    
+    messagebox.showinfo("","Logged Out Successfully")
 
 # root = tk.Tk()
 # signin()
