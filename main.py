@@ -110,19 +110,19 @@ my_canvas.create_window((0,0), window=Products_Frame, anchor='nw')
 # Initialize account buttons
 signin_button = tk.Button(Account_frame, text='Sign in', padx=10, pady=5, command=signin, 
                         bg='#3276fc', fg='white', font=('Times New Roman', 12, 'bold'))
-login_button = tk.Button(Account_frame, text='Log in', padx=10, pady=5, command=lambda: user_login(Account_frame), 
+login_button = tk.Button(Account_frame, text='Log in', padx=10, pady=5, command=lambda: user_login(Account_frame, Retailer_frame), 
                        bg='#3276fc', fg='white', font=('Times New Roman', 12, 'bold'))
 
 signin_button.grid(row=0, column=0, padx=5)
 login_button.grid(row=0, column=1, padx=5)
 
 # Initialize the retailer frame with sign up and login buttons
-init_retailer_frame(Retailer_frame)
+init_retailer_frame(Retailer_frame, Account_frame)
 
 # login function used for login button widget
-def user_login(Account_frame):
+def user_login(Account_frame, Retailer_frame):
     login_state = read_file()[0]
-    login(login_state, Account_frame)
+    login(login_state, Account_frame, Retailer_frame)
 
 row_counter = 0  # Renamed from c
 frame_list = []

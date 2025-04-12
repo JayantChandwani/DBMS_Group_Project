@@ -6,6 +6,7 @@ from PIL import ImageTk,Image
 from savedata import *
 from otp import *
 from cart import *
+from RetailerAccount import retailer_login, retailer_signin
 
 update_file(False)
 
@@ -142,7 +143,7 @@ def signin():
     enter_button = tk.Button(frame, text = 'Enter', command = lambda: [enter(), otp_func()], padx = 5)
     enter_button.grid(row = 6, column = 0, pady = 20, padx = 200, columnspan = 2)
 
-def login(login_state, Account_frame):
+def login(login_state, Account_frame, Retailer_frame):
     style = Style()
     style.configure('signin.TEntry', height = 20, width = 3)
     style.configure('login_entry.TLabel', background = '#282c34', foreground = 'white', padding = [100,0,0,5], justify = 'left', anchor = 'w')
@@ -197,12 +198,15 @@ def login(login_state, Account_frame):
                 
                 for widgets in Account_frame.winfo_children():
                     widgets.destroy()
+
+                for widgets in Retailer_frame.winfo_children():
+                    widgets.destroy()
             
                 cart_button = tk.Button(Account_frame, text='🛒 Cart', command=cart, 
                                       padx=10, pady=5, bg='#3276fc', 
                                       fg='white', font=('Times New Roman', 12, 'bold'))
                 logout_button = tk.Button(Account_frame, text='Logout', 
-                                        command=lambda: logout(Account_frame),
+                                        command=lambda: logout(Account_frame, Retailer_frame),
                                         padx=10, pady=5, bg='#3276fc',
                                         fg='white', font=('Times New Roman', 12, 'bold'))
                 
@@ -290,11 +294,11 @@ def login(login_state, Account_frame):
         send_otp_button.grid(row = 3, column = 0, pady = 20, padx = 200, columnspan = 2)
         # btn.place(x=90, y=154)
 
-def user_login(Account_frame):
+def user_login(Account_frame, Retailer_frame):
     login_state = read_file()[0]
-    login(login_state, Account_frame)
+    login(login_state, Account_frame, Retailer_frame)
 
-def logout(Account_frame):
+def logout(Account_frame, Retailer_frame):
     update_file(False)
     update_email_file("")
     
@@ -307,6 +311,15 @@ def logout(Account_frame):
     login_button = tk.Button(Account_frame, text='Log in', padx=10, pady=5,
                             command=lambda: login(False, Account_frame), bg='#3276fc', 
                             fg='white', font=('Times New Roman', 12, 'bold'))
+    retailer_signin_button = tk.Button(Retailer_frame, text='Retailer Sign up', padx=10, pady=5, 
+                                    command=retailer_signin, bg='#3276fc', fg='white', 
+                                    font=('Times New Roman', 12, 'bold'))
+    retailer_login_button = tk.Button(Retailer_frame, text='Retailer Login', padx=10, pady=5,
+                                   command=lambda: retailer_login(Retailer_frame, Account_frame), bg='#3276fc', 
+                                   fg='white', font=('Times New Roman', 12, 'bold'))
+    
+    retailer_signin_button.grid(row=0, column=0, padx=5)
+    retailer_login_button.grid(row=0, column=1, padx=5) 
     
     signin_button.grid(row=0, column=0, padx=5)
     login_button.grid(row=0, column=1, padx=5)

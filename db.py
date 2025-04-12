@@ -1,6 +1,13 @@
 import mysql.connector as sql
+import os
+from dotenv import load_dotenv
 
-con = sql.connect(host="localhost", user='root', passwd='csf212')
+load_dotenv()
+
+USER_NAME = os.getenv("SQL_USERNAME")
+PASSWORD = os.getenv("SQL_PASS")
+
+con = sql.connect(host="localhost", user=USER_NAME, passwd=PASSWORD)
 
 c = con.cursor()
 
@@ -384,4 +391,6 @@ def get_all_products():
     c.execute("USE SHOPPING;")
     c.execute("SELECT * FROM product;")
     data = c.fetchall()
+    # return c.execute("INSERT INTO cart VALUES(%s, 0, 0, 0, 0, 0, 0, 0, 0);", (email, ))
     return data
+    con.commit()

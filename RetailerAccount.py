@@ -161,7 +161,7 @@ def retailer_signin():
     enter_button = tk.Button(frame, text='Enter', command=lambda: [enter(), otp_func()], padx=5)
     enter_button.grid(row=6, column=0, pady=20, padx=200, columnspan=2)
 
-def retailer_login(Retailer_frame):
+def retailer_login(Retailer_frame, Account_frame):
     style = Style()
     style.configure('signin.TEntry', height=20, width=3)
     style.configure('login_entry.TLabel', background='#282c34', foreground='white', padding=[100,0,0,5], justify='left', anchor='w')
@@ -211,6 +211,9 @@ def retailer_login(Retailer_frame):
                 
                 # Update retailer frame with management options
                 for widgets in Retailer_frame.winfo_children():
+                    widgets.destroy()
+
+                for widgets in Account_frame.winfo_children():
                     widgets.destroy()
             
                 manage_products_button = tk.Button(Retailer_frame, text='Manage Products', 
@@ -320,9 +323,17 @@ def retailer_logout(Retailer_frame):
     retailer_login_button = tk.Button(Retailer_frame, text='Retailer Login', padx=10, pady=10,
                                    command=lambda: retailer_login(Retailer_frame), bg='#3276fc', 
                                    fg='white', font='Impact')
+    signin_button = tk.Button(Account_frame, text='Sign in', padx=10, pady=5, 
+                            command=signin, bg='#3276fc', fg='white', 
+                            font=('Times New Roman', 12, 'bold'))
+    login_button = tk.Button(Account_frame, text='Log in', padx=10, pady=5,
+                            command=lambda: login(False, Account_frame), bg='#3276fc', 
+                            fg='white', font=('Times New Roman', 12, 'bold'))
     
     retailer_signin_button.grid(row=0, column=0, padx=1)
     retailer_login_button.grid(row=0, column=1, padx=1)
+    signin_button.grid(row=0, column=0, padx=5)
+    login_button.grid(row=0, column=1, padx=5)
     
     messagebox.showinfo("", "Logged Out Successfully")
 
@@ -662,12 +673,12 @@ def open_product_management():
     load_products()
 
 # Function to initialize retailer frame
-def init_retailer_frame(Retailer_frame):
+def init_retailer_frame(Retailer_frame, Account_frame):
     retailer_signin_button = tk.Button(Retailer_frame, text='Retailer Sign up', padx=10, pady=5, 
                                     command=retailer_signin, bg='#3276fc', fg='white', 
                                     font=('Times New Roman', 12, 'bold'))
     retailer_login_button = tk.Button(Retailer_frame, text='Retailer Login', padx=10, pady=5,
-                                   command=lambda: retailer_login(Retailer_frame), bg='#3276fc', 
+                                   command=lambda: retailer_login(Retailer_frame, Account_frame), bg='#3276fc', 
                                    fg='white', font=('Times New Roman', 12, 'bold'))
     
     retailer_signin_button.grid(row=0, column=0, padx=5)
