@@ -363,12 +363,41 @@ def add_product(name, price, description, retailer_email):
 
 def update_product(pid, name, price, description, retailer_email):
     c.execute("USE SHOPPING;")
-    # Make sure retailer can only update their own products
-    c.execute("UPDATE product SET name=%s, price=%s, description=%s WHERE pid=%s AND retailer_email=%s;", 
-             (name, price, description, pid, retailer_email))
-    affected = c.rowcount
-    con.commit()
-    return affected > 0
+    try:
+        # First verify ownership using case-insensitive comparison
+        c.execute("SELECT retailer_email, name, price, description FROM product WHERE pid=%s AND LOWER(retailer_email)=LOWER(%s);", 
+                 (pid, retailer_email))
+        result = c.fetchone()
+        print(f"Current product data: {result}")
+        
+        if not result:
+            print(f"Product {pid} not found or ownership verification failed")
+            return False
+        
+        current_email, current_name, current_price, current_description = result
+        print(f"Current values: name='{current_name}', price={current_price}, description='{current_description}'")
+        print(f"New values: name='{name}', price={price}, description='{description}'")
+        
+        # Update the product since we already verified ownership
+        update_query = """
+            UPDATE product 
+            SET name=%s, price=%s, description=%s 
+            WHERE pid=%s;
+        """
+        print(f"Executing update query with values: {(name, price, description, pid)}")
+        
+        # Ensure connection is active
+        if not con.is_connected():
+            con.ping(reconnect=True)
+        
+        c.execute(update_query, (name, price, description, pid))
+        affected = c.rowcount
+        con.commit()
+        print(f"Update affected {affected} rows")
+        return affected > 0
+    except Exception as e:
+        print(f"Error updating product: {str(e)}")
+        return False
 
 
 def delete_product(pid, retailer_email):
