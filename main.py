@@ -55,11 +55,11 @@ accounts_section_frame.pack(fill='x')
 accounts_section_frame.pack_propagate(0)  # Prevent shrinking
 
 # Account section labels
-customer_label = Label(accounts_section_frame, text='CUSTOMER', style='section_label.TLabel')
-customer_label.pack(side='left', padx=(20, 0))
+# customer_label = Label(accounts_section_frame, text='CUSTOMER', style='section_label.TLabel')
+# customer_label.pack(side='left', padx=(20, 0))
 
-retailer_label = Label(accounts_section_frame, text='RETAILER', style='section_label.TLabel')
-retailer_label.pack(side='left', padx=(300, 0))
+# retailer_label = Label(accounts_section_frame, text='RETAILER', style='section_label.TLabel')
+# retailer_label.pack(side='left', padx=(300, 0))
 
 # Account buttons frames
 Account_frame = tk.Frame(accounts_section_frame, bg='#282c34')
